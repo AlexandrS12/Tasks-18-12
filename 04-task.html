@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task 04</title>
+</head>
+<style>
+    #todoList {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .completed {
+        border: 2px solid black;
+        border-radius: 10px;
+        padding: 5px;
+        background-color: green;
+        color: white;   
+        margin-top: 1%;
+        width: 30em;
+    }
+
+    .incomplete {
+        border: 2px solid black;
+        border-radius: 5px;
+        padding: 5px;
+        background-color: red;
+        color: white;   
+        margin-top: 1%;
+        width: 30em;
+    }
+
+    button{
+        width: 30%;
+        height: 3em;
+        border: 2px solid black;
+        border-radius: 10px;
+        background-color: rgb(17, 102, 74);
+        color: rgb(210, 253, 16);
+        font-weight: bold;
+    }
+</style>
+
+<body>
+    <button id="button">load list</button>
+    <div>
+        <p>red - not do</p>
+        <p>green - did</p>    
+    </div>
+    <span id="save" style="display: none;">Loading...</span>
+    <div id="todoList">
+    </div>
+
+
+    <script>
+        /*
+        Задание:
+        Напишите сценарий, который выполняет GET запрос по адресу https://jsonplaceholder.typicode.com/todos
+        И выводит содержимое ответа в виде таблицы.
+        */
+
+        let link = "https://jsonplaceholder.typicode.com/todos";
+        let button = document.querySelector("#button");
+        let save = document.querySelector("#save");
+        let todoList = document.querySelector("#todoList");
+
+        button.addEventListener("click", function () {
+            show();
+            fetch(link)
+                .then(response => response.json())
+                .then(json => renderList(json))
+                .finally(hideLoader);
+        });
+
+        function show() {
+            save.style.display = "inline";
+        }
+
+        function hide() {
+            save.style.display = "none";
+        }
+
+        function renderList(list) {
+            list.forEach(element => {
+                let div = document.createElement("div");
+                div.innerHTML = `${element.id} - ${element.title}`;
+
+                if (element.completed) {
+                    div.classList.add("completed");
+                }
+                else {
+                    div.classList.add("incomplete");
+                }
+
+                todoList.append(div);
+            });
+        }
+    </script>
+</body>
+
+</html>
